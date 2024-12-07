@@ -1,6 +1,8 @@
 package com.cristhian.apicompras.Controller;
 
+import com.cristhian.apicompras.DTO.ArticuloDTO;
 import com.cristhian.apicompras.Model.CompraModel;
+import com.cristhian.apicompras.Service.ArticuloClient;
 import com.cristhian.apicompras.Service.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ public class CompraController {
 
     @Autowired
     CompraService compraService;
+    @Autowired
+    ArticuloClient articuloClient;
 
     @GetMapping
     public ArrayList<CompraModel> obtenerCompras(){
@@ -46,4 +50,16 @@ public class CompraController {
             return ResponseEntity.status(404).body("Compra con ID " + id + " no encontrada.");
         }
     }
+
+    @GetMapping("/articulo/{id}")
+    public ResponseEntity<?> obtenerArticuloDeArticulos(@PathVariable Long id) {
+        try {
+            ArticuloDTO articulo = articuloClient.obtenerArticuloPorId(id);
+            return ResponseEntity.ok(articulo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+
 }
