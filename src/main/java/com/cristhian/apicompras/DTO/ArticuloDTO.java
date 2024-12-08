@@ -1,5 +1,11 @@
 package com.cristhian.apicompras.DTO;
 
+
+/*
+    DTO es una clase para controlar qué datos se envían o reciben del cliente.
+    En este caso como prueba para comunicar APIs  trayendo el articulo desde compra
+    con GET
+ */
 public class ArticuloDTO {
     private Long id;
     private String nombre;

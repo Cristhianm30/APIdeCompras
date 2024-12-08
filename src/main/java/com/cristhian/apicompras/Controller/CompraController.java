@@ -1,6 +1,7 @@
 package com.cristhian.apicompras.Controller;
 
 import com.cristhian.apicompras.DTO.ArticuloDTO;
+import com.cristhian.apicompras.DTO.CompraRespuestaDTO;
 import com.cristhian.apicompras.Model.CompraModel;
 import com.cristhian.apicompras.Service.ArticuloClient;
 import com.cristhian.apicompras.Service.CompraService;
@@ -26,8 +27,14 @@ public class CompraController {
     }
 
     @PostMapping
-    public CompraModel crearCompra(@RequestBody CompraModel compra) {
-        return compraService.crearCompra(compra);
+    public ResponseEntity<?> crearCompra(@RequestBody CompraModel compra) {
+        try{
+            CompraRespuestaDTO respuesta = compraService.crearCompra(compra);
+            return ResponseEntity.ok(respuesta);
+
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 
