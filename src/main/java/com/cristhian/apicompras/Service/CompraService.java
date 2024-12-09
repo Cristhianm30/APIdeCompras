@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,5 +72,44 @@ public class CompraService {
             return false;
         }
     }
+
+    public List<CompraRespuestaDTO> listarComprasPorArticulo(Long articuloId) {
+
+        List<CompraModel> compras = compraRepository.findByArticuloId(articuloId);
+
+
+        List<CompraRespuestaDTO> detalles = new ArrayList<>();
+
+
+        ArticuloDTO articulo = articuloClient.obtenerArticuloPorId(articuloId);
+
+
+        if (articulo == null) {
+            throw new RuntimeException("El artículo con ID " + articuloId + " no existe.");
+        }
+
+
+        for (CompraModel compra : compras) {
+
+            double valorTotal = compra.getCantidad() * articulo.getPrecio();
+
+
+            CompraRespuestaDTO detalle = new CompraRespuestaDTO();
+            detalle.setCompraId(compra.getId());
+            detalle.setArticuloId(articulo.getId());
+            detalle.setNombreArticulo(articulo.getNombre());
+            detalle.setPrecioArticulo(articulo.getPrecio());
+            detalle.setCantidadComprada(compra.getCantidad());
+            detalle.setStockRestante(articulo.getStock());
+            detalle.setValorTotal(valorTotal);
+            detalle.setFechaCompra(compra.getFechaCompra());
+
+
+            detalles.add(detalle);
+        }
+
+        return detalles;
+    }
+
 
 }

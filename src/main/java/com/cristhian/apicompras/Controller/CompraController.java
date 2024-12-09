@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -65,6 +66,16 @@ public class CompraController {
             return ResponseEntity.ok(articulo);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/articulos/{articuloId}")
+    public ResponseEntity<?> listarComprasPorArticulo(@PathVariable Long articuloId) {
+        try {
+            List<CompraRespuestaDTO> compras = compraService.listarComprasPorArticulo(articuloId);
+            return ResponseEntity.ok(compras);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
